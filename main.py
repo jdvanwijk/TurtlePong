@@ -30,8 +30,11 @@ def start_round():
     p2_paddle.reset_starting_position()
     screen.update()
 
-    countdown.display_countdown(screen, p1_paddle, p2_paddle)
+    countdown.display_countdown(screen)
     ball.serve()
+
+    p1_paddle.freeze = False
+    p2_paddle.freeze = False
 
 
 def generate_next_frame():
