@@ -1,5 +1,5 @@
 # TurtlePong
-A version of Pong with dynamic ball physics, created with Turtle Graphics
+A version of Pong with dynamic ball physics, using Turtle Graphics
 
 **Player 1**  
 w: move up  
