@@ -22,6 +22,9 @@ countdown = Countdown()
 def start_round():
     """- Reset ball to its starting position and properties \n- Reset paddle positions \n- Display countdown
     \n- Serve ball"""
+    p1_paddle.freeze = True
+    p2_paddle.freeze = True
+
     ball.ball_reset()
     p1_paddle.reset_starting_position()
     p2_paddle.reset_starting_position()

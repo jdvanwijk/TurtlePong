@@ -11,11 +11,8 @@ class Countdown(Turtle):
         self.hideturtle()
 
     def display_countdown(self, game_screen, p1_paddle, p2_paddle):
-        """Freezes paddles, shows a countdown timer to signal the beginning of the round and unfreezes the paddles"""
+        """Shows a countdown timer to signal the beginning of the round and unfreezes the paddles"""
         countdown_time = settings["COUNTDOWN TIME"]
-
-        p1_paddle.freeze = True
-        p2_paddle.freeze = True
 
         sleep(2)
 
