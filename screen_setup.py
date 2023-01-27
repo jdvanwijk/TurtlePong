@@ -12,7 +12,7 @@ def setup_screen(game_screen):
 
 
 def bind_keys(game_screen, p1_paddle, p2_paddle):
-    """Binds the keys inputs to the player paddles"""
+    """Binds the key inputs to the player paddles"""
     # Capital letters are included so that the paddle still moves when Caps Lock is turned on:
     game_screen.onkey(p1_paddle.move_up, "w")
     game_screen.onkey(p1_paddle.move_up, "W")

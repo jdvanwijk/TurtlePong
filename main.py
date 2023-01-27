@@ -87,3 +87,14 @@ while not game_end:
 screen.exitonclick()
 
 # TODO: continuous paddle moving without blocking other keys possible?
+# TODO: calculation of x-speed and y-speed can probably be simplified - calculate heading integer
+#       (instead of constantly calculating speed floats) and apply to ball heading. (How to change heading
+#       without changing appearance of the sprite?)
+# TODO: merge calculate distance and paddle collision, generating an extra list for this purpose is a bit jank
+# TODO: program some "surprise modes" - for example, there's a 5% chance that there's more than one ball in a round,
+#       or the ball is extra big, etc.
+# TODO: there could be a cooperative mode where the goal is to hit the ball back and forth as often as possible
+# TODO: there could be special powers that appear on the screen occasionally and that you can pick up by hitting them
+#       with the ball. For example, if you hit the ball, the ball will curve unexpectedly when moving toward
+#       your opponent, or the opponent will only see the ball on the second half of the screen (so it's difficult
+#       to anticipate), or the ball is momentarily extra fast, etc.
