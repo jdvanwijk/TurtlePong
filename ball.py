@@ -52,100 +52,81 @@ class Ball(Turtle):
         elif self.direction == "left_down":
             self.setposition((self.xcor() - self.x_speed), (self.ycor() - self.y_speed))
 
-    def check_wall_collision(self):
-        """Checks for wall collision and changes ball direction if a collision is detected"""
-        def wall_collision() -> bool:
-            """Checks collision between ball and wall, returns bool"""
-            wall_collision_ycor = (settings["SCREEN HEIGHT"] / 2) - (settings["BALL SIZE"] / 2) - self.speed
-            if abs(self.ycor()) >= wall_collision_ycor:
-                collision = True
-            else:
-                collision = False
+    def wall_collision(self) -> bool:
+        """Checks if the ball collided with the wall"""
+        wall_collision_ycor = (settings["SCREEN HEIGHT"] / 2) - (settings["BALL SIZE"] / 2) - self.speed
 
-            return collision
+        if abs(self.ycor()) >= wall_collision_ycor:
+            collision = True
+        else:
+            collision = False
 
-        def apply_direction_change():
-            """If collision is detected, changes direction of the ball"""
-            # Mirror the direction vertically on wall collision:
-            if self.direction == "right_up":
-                self.direction = "right_down"
-            elif self.direction == "right_down":
-                self.direction = "right_up"
-            elif self.direction == "left_up":
-                self.direction = "left_down"
-            elif self.direction == "left_down":
-                self.direction = "left_up"
+        return collision
 
-        if wall_collision():
-            apply_direction_change()
+    def apply_direction_change_after_wall_collision(self):
+        """Changes direction of the ball after wall collision"""
+        # Mirror the direction vertically on wall collision:
+        if self.direction == "right_up":
+            self.direction = "right_down"
+        elif self.direction == "right_down":
+            self.direction = "right_up"
+        elif self.direction == "left_up":
+            self.direction = "left_down"
+        elif self.direction == "left_down":
+            self.direction = "left_up"
 
-    def check_paddle_collision(self, p1_paddle, p2_paddle):
-        """Checks for paddle collision and changes ball direction and angle if collision is detected. Will change
-        ball color and ball speed if settings['BALL SPEED UP'] == True"""
+    def paddle_collision(self, p1_paddle, p2_paddle) -> list:
+        """Checks for collision between paddle and ball, and returns a list ([0] == collision True/False,
+        [1] == y-distance between paddle and ball at the moment of collision)"""
         max_x_distance_paddle_collision = (settings["PADDLE WIDTH"] / 2) + (settings["BALL SIZE"] / 2) + self.speed
         max_y_distance_paddle_collision = (settings["PADDLE LENGTH"] / 2) + (settings["BALL SIZE"] / 2) + self.speed
 
-        def calculate_distance() -> list:
-            """Calculates distance between paddle and ball, returns list with x-distance and y-distance"""
+        if self.direction == "right_up" or self.direction == "right_down":
+            current_x_distance_paddle_ball = p2_paddle.xcor() - self.xcor()
+            current_y_distance_paddle_ball = self.ycor() - p2_paddle.ycor()
+        else:
+            current_x_distance_paddle_ball = self.xcor() - p1_paddle.xcor()
+            current_y_distance_paddle_ball = self.ycor() - p1_paddle.ycor()
+
+        if (0 <= abs(current_x_distance_paddle_ball) <= max_x_distance_paddle_collision) and (
+                0 <= abs(current_y_distance_paddle_ball) <= max_y_distance_paddle_collision):
+            collision = True
+        else:
+            collision = False
+
+        return [collision, current_y_distance_paddle_ball]
+
+    def apply_changes_after_paddle_collision(self, paddle_ball_y_distance: float):
+        """If there has been a collision, apply changes to direction and angle of the ball, optionally apply
+        changes to color and total speed of the ball """
+        if settings["BALL SPEED UP"]:
+            # Changes the hue of the ball and speed up the ball every time the ball hits a paddle:
+            if self.fillcolor() != settings["BALL COLOR GRADIENT"][-1]:
+                self.speed += (settings["BALL MAX SPEED UP"] / len(settings["BALL COLOR GRADIENT"]))
+                current_gradient_index = settings["BALL COLOR GRADIENT"].index(self.fillcolor())
+                next_color = settings["BALL COLOR GRADIENT"][current_gradient_index + 1]
+                self.color(next_color)
+
+        # Set the angle of the ball, depending on where it hits the paddle. Toward the middle, the ball will move
+        # more horizontally, while toward the edges of the paddle, the ball will move more diagonally (maximum
+        # angle is 45 degrees):
+        self.x_speed = self.speed * (1 - (abs(paddle_ball_y_distance) / settings["PADDLE LENGTH"]))
+        if self.x_speed < (self.speed / 2):     # Prevents vertical stalling of the ball (enforces max angle)
+            self.x_speed = (self.speed / 2)
+
+        self.set_y_speed()
+
+        # Set the direction of the ball, depending on if the ball hit the top or the lower half of the paddle:
+        if paddle_ball_y_distance >= 0:     # If ball hits top half of the paddle
             if self.direction == "right_up" or self.direction == "right_down":
-                current_x_distance_paddle_ball = p2_paddle.xcor() - self.xcor()
-                current_y_distance_paddle_ball = self.ycor() - p2_paddle.ycor()
+                self.direction = "left_up"
             else:
-                current_x_distance_paddle_ball = self.xcor() - p1_paddle.xcor()
-                current_y_distance_paddle_ball = self.ycor() - p1_paddle.ycor()
-
-            return [current_x_distance_paddle_ball, current_y_distance_paddle_ball]
-
-        def paddle_collision(paddle_ball_distance: list) -> bool:
-            """Checks the list that was returned by calculate_distance() and determines if there was a paddle
-            collision, returns bool"""
-            x_distance = paddle_ball_distance[0]
-            y_distance = paddle_ball_distance[1]
-
-            if (0 <= abs(x_distance) <= max_x_distance_paddle_collision) and (
-                    0 <= abs(y_distance) <= max_y_distance_paddle_collision):
-                collision = True
+                self.direction = "right_up"
+        elif paddle_ball_y_distance < 0:    # If ball hits lower half of the paddle
+            if self.direction == "right_up" or self.direction == "right_down":
+                self.direction = "left_down"
             else:
-                collision = False
-
-            return collision
-
-        def apply_changes(paddle_ball_distance: list):
-            """If there has been a collision, apply changes to direction and angle of the ball, optionally apply
-            changes to color and total speed of the ball """
-            if settings["BALL SPEED UP"]:
-                # Changes the hue of the ball and speed up the ball every time the ball hits a paddle:
-                if self.fillcolor() != settings["BALL COLOR GRADIENT"][-1]:
-                    self.speed += (settings["BALL MAX SPEED UP"] / len(settings["BALL COLOR GRADIENT"]))
-                    current_gradient_index = settings["BALL COLOR GRADIENT"].index(self.fillcolor())
-                    next_color = settings["BALL COLOR GRADIENT"][current_gradient_index + 1]
-                    self.color(next_color)
-
-            # Set the angle of the ball, depending on where it hits the paddle. Toward the middle, the ball will move
-            # more horizontally, while toward the edges of the paddle, the ball will move more diagonally (maximum
-            # angle is 45 degrees):
-            y_distance = paddle_ball_distance[1]
-            self.x_speed = self.speed * (1 - (abs(y_distance) / settings["PADDLE LENGTH"]))
-            if self.x_speed < (self.speed / 2):     # Prevents vertical stalling of the ball (enforces max angle)
-                self.x_speed = (self.speed / 2)
-
-            self.set_y_speed()
-
-            # Set the direction of the ball, depending on if the ball hit the top or the lower half of the paddle:
-            if y_distance >= 0:     # If ball hits top half of the paddle
-                if self.direction == "right_up" or self.direction == "right_down":
-                    self.direction = "left_up"
-                else:
-                    self.direction = "right_up"
-            elif y_distance < 0:    # If ball hits lower half of the paddle
-                if self.direction == "right_up" or self.direction == "right_down":
-                    self.direction = "left_down"
-                else:
-                    self.direction = "right_down"
-
-        distance_paddle_ball = calculate_distance()
-        if paddle_collision(distance_paddle_ball):
-            apply_changes(distance_paddle_ball)
+                self.direction = "right_down"
 
     def check_goal(self) -> list:
         """Checks if a goal has been scored. Prints a message and returns [goal_report].\n
@@ -167,3 +148,14 @@ class Ball(Turtle):
 
         goal_report = [goal_scored, scoring_player]
         return goal_report
+
+    def check_end_game_coop(self) -> bool:
+        ball_exit_screen_xcor = (settings["SCREEN WIDTH"] / 2) + (settings["BALL SIZE"] / 2)
+
+        if abs(self.xcor()) >= ball_exit_screen_xcor:
+            game_over = True
+            print("GAME OVER!")
+        else:
+            game_over = False
+
+        return game_over

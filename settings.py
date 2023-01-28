@@ -15,14 +15,17 @@ settings = {
                             (255, 169, 143), (255, 147, 116), (255, 123, 90), (255, 97, 64), (255, 65, 36),
                             (255, 0, 0)],   # IMPORTANT: first value needs to be the same as "BALL COLOR"
 
+    "COOPERATIVE": False,
+
     "PADDLE WIDTH": 12,
     "PADDLE LENGTH": 60,
     "PADDLE SPEED": 20,
     "PADDLE DISTANCE FROM GOAL": 70,
     "PADDLE COLOR": "white",
 
-    "SCOREBOARD X-POSITION": 50,
-    "SCOREBOARD Y-POSITION": 180,
+    "SCOREBOARD P1 POSITION": (-50, 180),
+    "SCOREBOARD P2 POSITION": (50, 180),
+    "SCOREBOARD COOP POSITION": (0, 180),
     "SCOREBOARD FONT": ("Courier", 30, "bold"),
     "SCOREBOARD ALIGNMENT": "center",
 
