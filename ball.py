@@ -148,14 +148,3 @@ class Ball(Turtle):
 
         goal_report = [goal_scored, scoring_player]
         return goal_report
-
-    def check_end_game_coop(self) -> bool:
-        ball_exit_screen_xcor = (settings["SCREEN WIDTH"] / 2) + (settings["BALL SIZE"] / 2)
-
-        if abs(self.xcor()) >= ball_exit_screen_xcor:
-            game_over = True
-            print("GAME OVER!")
-        else:
-            game_over = False
-
-        return game_over
