@@ -33,8 +33,6 @@ class CompetitiveScore(Score):
             self.setposition(settings["SCOREBOARD P2 POSITION"])
 
 
-
-
 class CooperativeScore(Score):
     def __init__(self):
         super().__init__()
