@@ -79,7 +79,8 @@ def check_for_goal():
 
 
 def check_for_game_end():
-    """Check if the end game score determined in settings['END GAME SCORE'] has been reached by one of the players"""
+    """In Coop mode, check if the ball has left the screen. In Competitive mode, check if the end game score
+    determined in settings['END GAME SCORE'] has been reached by one of the players """
     if settings["COOPERATIVE"]:
         ball_exit_screen_xcor = (settings["SCREEN WIDTH"] / 2) + (settings["BALL SIZE"] / 2)
         if abs(ball.xcor()) >= ball_exit_screen_xcor:
