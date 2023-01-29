@@ -15,7 +15,7 @@ settings = {
                             (255, 169, 143), (255, 147, 116), (255, 123, 90), (255, 97, 64), (255, 65, 36),
                             (255, 0, 0)],   # IMPORTANT: first value needs to be the same as "BALL COLOR"
 
-    "COOPERATIVE": True,
+    "COOPERATIVE": False,
 
     "PADDLE WIDTH": 12,
     "PADDLE LENGTH": 60,
