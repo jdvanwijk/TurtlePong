@@ -42,6 +42,7 @@ class CooperativeScore(Score):
             self.coop_top_score = int(top_score.read())
 
     def update_coop_top_score(self):
+        """If end game score exceeds current top score, update high score for next game"""
         if self.points > self.coop_top_score:
             with open("coop_top_score.txt", "w") as top_score:
                 top_score.write(str(self.points))
