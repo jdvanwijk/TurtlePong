@@ -110,7 +110,8 @@ class Ball(Turtle):
         # Set the angle of the ball, depending on where it hits the paddle. Toward the middle, the ball will move
         # more horizontally, while toward the edges of the paddle, the ball will move more diagonally (maximum
         # angle is 45 degrees):
-        self.x_speed = self.speed * (1 - (abs(paddle_ball_y_distance) / settings["PADDLE LENGTH"]))
+        self.x_speed = self.speed * (
+                    1 - (abs(paddle_ball_y_distance) / (settings["PADDLE LENGTH"] + settings["BALL SIZE"])))
         if self.x_speed < (self.speed / 2):     # Prevents vertical stalling of the ball (enforces max angle)
             self.x_speed = (self.speed / 2)
 

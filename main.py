@@ -127,6 +127,7 @@ if not settings["COOPERATIVE"]:
 screen.exitonclick()
 
 # TODO: continuous paddle moving without blocking other keys possible?
+# TODO: very occasionally, the ball can get stuck in one of the walls. Find a fix for this glitch
 # TODO: calculation of x-speed and y-speed can probably be simplified - calculate heading integer
 #       (instead of constantly calculating speed floats) and apply to ball heading. (How to change heading
 #       without changing appearance of the sprite?)
