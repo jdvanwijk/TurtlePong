@@ -3,6 +3,7 @@ from screen_setup import setup_screen, bind_keys
 from paddle import Paddle
 from scoreboard import CompetitiveScore, CooperativeScore
 from ball import Ball
+from referee import Referee
 from countdown import Countdown
 from settings import settings
 from time import sleep
@@ -11,6 +12,7 @@ from time import sleep
 screen = Screen()
 setup_screen(screen)
 ball = Ball()
+referee = Referee()
 p1_paddle = Paddle("p1")
 p2_paddle = Paddle("p2")
 bind_keys(screen, p1_paddle, p2_paddle)
@@ -23,12 +25,15 @@ else:
 
 countdown = Countdown()
 
+screen.update()
+
 
 def start_round():
     """- Reset ball to its starting position and properties \n- Reset paddle positions \n- Display countdown
     \n- Serve ball"""
     p1_paddle.freeze = True
     p2_paddle.freeze = True
+    sleep(2)
 
     ball.ball_reset()
     p1_paddle.reset_starting_position()
@@ -60,47 +65,6 @@ def generate_next_frame():
     sleep(1 / settings["FRAME RATE"])
 
 
-def check_for_goal():
-    """Check if a goal was scored and if so, add a point to that player's (competitive mode only)"""
-    goal_report = ball.check_goal()
-    if goal_report[0]:
-        goal = True
-        if goal_report[1] == "p1":
-            p1_score.update_score()
-        elif goal_report[1] == "p2":
-            p2_score.update_score()
-        screen.update()
-        if not game_end:
-            sleep(2.5)
-    else:
-        goal = False
-
-    return goal
-
-
-def check_for_game_end():
-    """In Coop mode, check if the ball has left the screen. In Competitive mode, check if the end game score
-    determined in settings['END GAME SCORE'] has been reached by one of the players """
-    if settings["COOPERATIVE"]:
-        ball_exit_screen_xcor = (settings["SCREEN WIDTH"] / 2) + (settings["BALL SIZE"] / 2)
-        if abs(ball.xcor()) >= ball_exit_screen_xcor:
-            is_game_over = True
-        else:
-            is_game_over = False
-
-    if not settings["COOPERATIVE"]:
-        if p1_score.points >= settings["GAME END SCORE"] or p2_score.points >= settings["GAME END SCORE"]:
-            is_game_over = True
-            if p1_score.points > p2_score.points:
-                print(f"GAME OVER, {p1_score.player.upper()} WINS!")
-            else:
-                print(f"GAME OVER, {p2_score.player.upper()} WINS!")
-        else:
-            is_game_over = False
-
-    return is_game_over
-
-
 # Game starts here:
 if settings["COOPERATIVE"]:
     print(f"Current Top Score: {coop_score.coop_top_score}")
@@ -109,7 +73,7 @@ if settings["COOPERATIVE"]:
     game_end = False
     while not game_end:
         generate_next_frame()
-        game_end = check_for_game_end()
+        game_end = referee.check_game_end_coop(ball, coop_score)
 
     coop_score.update_coop_top_score()
 
@@ -121,8 +85,8 @@ if not settings["COOPERATIVE"]:
         goal_scored = False
         while not goal_scored:
             generate_next_frame()
-            goal_scored = check_for_goal()
-            game_end = check_for_game_end()
+            goal_scored = referee.check_goal_scored(ball, p1_score, p2_score)
+            game_end = referee.check_game_end_competitive(p1_score, p2_score)
 
 screen.exitonclick()
 

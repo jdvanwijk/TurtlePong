@@ -18,6 +18,7 @@ class Ball(Turtle):
         self.x_speed = 0
         self.y_speed = 0
         self.direction = ""    # Can be "left_up", "left_down", "right_up" or "right_down"
+        self.ball_reset()
 
     def ball_reset(self):
         """Resets the ball's starting position, color and speed at the beginning of the round"""
@@ -128,24 +129,3 @@ class Ball(Turtle):
                 self.direction = "left_down"
             else:
                 self.direction = "right_down"
-
-    def check_goal(self) -> list:
-        """Checks if a goal has been scored. Prints a message and returns [goal_report].\n
-        goal_report[0]: was a goal scored? -> True/False\n
-        goal_report[1]: who scored the goal? -> 'p1', 'p2' or 'none'"""
-        ball_exit_screen_xcor = (settings["SCREEN WIDTH"] / 2) + (settings["BALL SIZE"] / 2)
-
-        if self.xcor() >= ball_exit_screen_xcor:
-            print("p1 scored a goal")
-            goal_scored = True
-            scoring_player = "p1"
-        elif self.xcor() <= -ball_exit_screen_xcor:
-            print("p2 scored a goal")
-            goal_scored = True
-            scoring_player = "p2"
-        else:
-            goal_scored = False
-            scoring_player = "none"
-
-        goal_report = [goal_scored, scoring_player]
-        return goal_report
