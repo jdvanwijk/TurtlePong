@@ -31,14 +31,16 @@ screen.update()
 def start_round():
     """- Reset ball to its starting position and properties \n- Reset paddle positions \n- Display countdown
     \n- Serve ball"""
+    screen.update()
     p1_paddle.freeze = True
     p2_paddle.freeze = True
     sleep(2)
 
     ball.ball_reset()
-    p1_paddle.reset_starting_position()
-    p2_paddle.reset_starting_position()
+    p1_paddle.paddle_reset()
+    p2_paddle.paddle_reset()
     screen.update()
+    sleep(1.5)
 
     countdown.display_countdown(screen)
     ball.serve()
@@ -75,7 +77,8 @@ if settings["COOPERATIVE"]:
         generate_next_frame()
         game_end = referee.check_game_end_coop(ball, coop_score)
 
-    coop_score.update_coop_top_score()
+    if game_end:
+        coop_score.update_coop_top_score()
 
 if not settings["COOPERATIVE"]:
     game_end = False

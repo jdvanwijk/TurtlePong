@@ -14,8 +14,6 @@ class Countdown(Turtle):
         """Shows a countdown timer to signal the beginning of the round"""
         countdown_time = settings["COUNTDOWN TIME"]
 
-        sleep(2)
-
         for _ in range(countdown_time):
             self.write(arg=countdown_time, align=settings["COUNTDOWN ALIGNMENT"], font=settings["COUNTDOWN FONT"])
             game_screen.update()

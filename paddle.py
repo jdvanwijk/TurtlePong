@@ -14,7 +14,7 @@ class Paddle(Turtle):
         self.penup()
         self.owner = player
         self.freeze = False
-        self.reset_starting_position()
+        self.paddle_reset()
 
     def move_up(self):
         """Moves the paddle up, unless the top of the screen has been reached."""
@@ -42,7 +42,7 @@ class Paddle(Turtle):
                 else:
                     self.back(abs(wall_collision_y_cor - self.ycor()))
 
-    def reset_starting_position(self):
+    def paddle_reset(self):
         """Resets the position of the player paddles at the beginning of the new round."""
         paddle_x_position = (settings["SCREEN WIDTH"] / 2) - settings["PADDLE DISTANCE FROM GOAL"]
         if self.owner == "p1":

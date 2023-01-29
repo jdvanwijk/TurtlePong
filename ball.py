@@ -99,7 +99,7 @@ class Ball(Turtle):
 
     def apply_changes_after_paddle_collision(self, paddle_ball_y_distance: float):
         """If there has been a collision, apply changes to direction and angle of the ball, optionally apply
-        changes to color and total speed of the ball """
+        changes the color and total speed of the ball """
         if settings["BALL SPEED UP"]:
             # Changes the hue of the ball and speed up the ball every time the ball hits a paddle:
             if self.fillcolor() != settings["BALL COLOR GRADIENT"][-1]:
