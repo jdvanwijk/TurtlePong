@@ -10,12 +10,12 @@ settings = {
     "BALL SPEED": 2,                        # Amount of pixels the ball moves at every screen refresh
 
     "BALL SPEED UP": True,                  # Can be turned off if user does not want ball to speed up during the game
-    "BALL MAX SPEED UP": 3,                 # The total amount of pixels that the ball is allowed to accelerate
+    "BALL MAX SPEED UP": 2,                 # The total amount of pixels that the ball is allowed to accelerate
     "BALL COLOR GRADIENT": [(255, 255, 255), (255, 234, 226), (255, 213, 198), (255, 191, 170),
                             (255, 169, 143), (255, 147, 116), (255, 123, 90), (255, 97, 64), (255, 65, 36),
                             (255, 0, 0)],   # IMPORTANT: first value needs to be the same as "BALL COLOR"
 
-    "COOPERATIVE": False,
+    "COOPERATIVE": True,
 
     "PADDLE WIDTH": 12,
     "PADDLE LENGTH": 60,
