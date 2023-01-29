@@ -54,7 +54,7 @@ class Ball(Turtle):
             self.setposition((self.xcor() - self.x_speed), (self.ycor() - self.y_speed))
 
     def wall_collision(self) -> bool:
-        """Checks if the ball collided with the wall"""
+        """Checks if the ball collided with the wall. If so, returns True, else, returns False"""
         wall_collision_ycor = (settings["SCREEN HEIGHT"] / 2) - (settings["BALL SIZE"] / 2) - self.speed
 
         if abs(self.ycor()) >= wall_collision_ycor:
